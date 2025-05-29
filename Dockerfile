@@ -6,6 +6,8 @@ WORKDIR /build
 # Copy the entire project to maintain module structure
 COPY . .
 
+RUN ls -R /build
+
 # Build the application
 RUN CGO_ENABLED=0 GOOS=linux go build -o gh-actions-exporter ./cmd/gh-actions-exporter
 
