@@ -1,7 +1,7 @@
 # Build stage
 FROM golang:1.22-alpine AS builder
 
-WORKDIR /build
+WORKDIR /app
 
 # Copy go modules first for better caching
 COPY go.mod go.sum ./
@@ -19,7 +19,7 @@ FROM alpine:latest
 WORKDIR /app
 
 # Copy the binary from builder
-COPY --from=builder /build/gh-actions-exporter .
+COPY --from=builder /app/gh-actions-exporter .
 
 # Make sure the binary is executable
 RUN chmod +x ./gh-actions-exporter
