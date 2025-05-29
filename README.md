@@ -38,15 +38,43 @@ gh-actions-exporter
 ### Installation
 
 1. Clone the repository:
-   ```
-   git clone <repository-url>
-   cd gh-actions-exporter
+   ```bash
+   git clone https://github.com/your-org/github-actions-exporter.git
+   cd github-actions-exporter
    ```
 
 2. Install dependencies:
-   ```
+   ```bash
    go mod tidy
    ```
+
+3. Build the application:
+   ```bash
+   go build -o github-actions-exporter cmd/gh-actions-exporter/main.go
+   ```
+
+### Configuration
+
+The application can be configured using environment variables:
+
+| Variable | Description | Default | Required |
+|----------|-------------|---------|----------|
+| `PORT` | The port the server will listen on | `:8080` | No |
+| `GITHUB_WEBHOOK_SECRET` | Secret token for verifying GitHub webhook signatures | None | Recommended for production |
+
+### Webhook Setup
+
+To set up GitHub webhooks for your repositories:
+
+1. Go to your repository's Settings > Webhooks
+2. Click "Add webhook"
+3. Set the Payload URL to `https://your-domain.com/webhook`
+4. Set Content type to `application/json`
+5. Select "Let me select individual events" and choose:
+   - Workflow runs
+   - Workflow jobs (optional)
+6. Add your webhook secret (should match `GITHUB_WEBHOOK_SECRET`)
+7. Click "Add webhook"
 
 ### Running the Application
 
@@ -56,11 +84,44 @@ gh-actions-exporter
 - `GITHUB_WEBHOOK_SECRET`: The secret token for verifying GitHub webhook signatures (optional but recommended for production)
 
 To run the application, execute the following command:
-```
+```bash
+# Run directly with Go
 go run cmd/gh-actions-exporter/main.go
+
+# Or run the built binary
+./github-actions-exporter
 ```
 
-The application will start an HTTP server that listens for GitHub webhook events.
+#### Using Docker
+
+You can also run the application using Docker:
+
+```bash
+# Build the Docker image
+docker build -t github-actions-exporter .
+
+# Run the container
+docker run -p 8080:8080 \
+  -e GITHUB_WEBHOOK_SECRET=your-secret \
+  github-actions-exporter
+```
+
+#### Using Kubernetes with Helm
+
+Deploy to Kubernetes using the provided Helm chart:
+
+```bash
+# Add the repository (replace with your actual Helm repository)
+helm repo add github-actions-exporter https://your-org.github.io/github-actions-exporter
+
+# Install the chart
+helm install github-actions-exporter github-actions-exporter/github-actions-exporter \
+  --set image.repository=your-registry/github-actions-exporter \
+  --set image.tag=latest \
+  --set env.GITHUB_WEBHOOK_SECRET=your-webhook-secret
+```
+
+The application will start an HTTP server that listens for GitHub webhook events at `/webhook` and exposes Prometheus metrics at `/metrics`.
 
 #### Security
 
@@ -112,12 +173,34 @@ github_workflow_status{branch=~"v.*",ref_type="tag"}
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and contribute to the project.
 
-### License
+### Development
 
-MIT license
+For local development:
 
-### Support
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes and add tests
+4. Run tests: `go test ./...`
+5. Run linting: `golangci-lint run`
+6. Commit your changes: `git commit -am 'Add some feature'`
+7. Push to the branch: `git push origin feature/your-feature`
+8. Submit a pull request
 
-@jdunnink
+### Security
+
+Please report security vulnerabilities following our [Security Policy](SECURITY.md).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Support
+
+- Create an [issue](https://github.com/your-org/github-actions-exporter/issues) for bug reports or feature requests
+- Contact: @jdunnink
+
+## Monitoring Dashboard
+
+The repository includes a Grafana dashboard (`dashboards/state-of-ci.json`) that provides visualization of your GitHub Actions metrics.

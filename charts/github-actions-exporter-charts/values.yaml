@@ -1,0 +1,116 @@
+# Default values for github-actions-exporter
+replicaCount: 1
+
+image:
+  repository: ghcr.io/your-org/github-actions-exporter  # Update with actual registry
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext:
+  fsGroup: 1000
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  capabilities:
+    drop:
+      - ALL
+
+service:
+  type: ClusterIP
+  port: 8080
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/metrics"
+
+ingress:
+  enabled: false
+  # className: nginx
+  # annotations:
+  #   nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  # hosts:
+  #   - host: github-actions-exporter.your-domain.com
+  #     paths:
+  #       - path: /
+  #         pathType: Prefix
+  # tls: []
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+env:
+  - name: GO_ENV
+    value: "production"
+  - name: PORT
+    value: ":8080"
+  # Uncomment and configure for production:
+  # - name: GITHUB_WEBHOOK_SECRET
+  #   valueFrom:
+  #     secretKeyRef:
+  #       name: github-webhook-secret
+  #       key: secret
+
+terminationGracePeriod:
+  enabled: true
+  seconds: 120
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 10
+  periodSeconds: 30
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: 8080
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+# GitHub webhook secret configuration
+githubWebhookSecret:
+  create: false
+  name: "github-webhook-secret"
+  # value: "your-webhook-secret-here"  # Set this for production
+
+# ServiceMonitor for Prometheus Operator
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  additionalLabels: {}
+  # metricRelabelings: []
+
+# Node selector for pod assignment
+nodeSelector: {}
+
+# Tolerations for pod assignment
+tolerations: []
+
+# Affinity for pod assignment
+affinity: {}
+
+# Additional volumes
+volumes: []
+
+# Additional volume mounts
+volumeMounts: []
