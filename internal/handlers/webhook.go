@@ -1,6 +1,9 @@
 package handlers
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -33,13 +36,47 @@ type GitHubWorkflowRunEvent struct {
 	} `json:"repository"`
 }
 
+// verifyGitHubSignature verifies the GitHub webhook signature
+func verifyGitHubSignature(payload []byte, signature string, secret string) bool {
+	if secret == "" {
+		// If no secret is configured, skip verification
+		return true
+	}
+
+	if signature == "" {
+		return false
+	}
+
+	// Remove the "sha256=" prefix from the signature
+	if !strings.HasPrefix(signature, "sha256=") {
+		return false
+	}
+	signature = signature[7:]
+
+	// Create HMAC signature
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write(payload)
+	expectedSignature := hex.EncodeToString(mac.Sum(nil))
+
+	// Compare signatures using constant time comparison
+	return hmac.Equal([]byte(signature), []byte(expectedSignature))
+}
+
 // WebhookHandler processes GitHub webhook events
-func WebhookHandler(c *gin.Context, processor *metrics.MetricsProcessor, logger *zap.Logger) {
+func WebhookHandler(c *gin.Context, processor *metrics.MetricsProcessor, logger *zap.Logger, webhookSecret string) {
 	// Read the request body
 	body, err := io.ReadAll(c.Request.Body)
 	if err != nil {
 		logger.Error("Failed to read request body", zap.Error(err))
 		c.JSON(400, gin.H{"error": "Failed to read request body"})
+		return
+	}
+
+	// Verify GitHub signature
+	signature := c.GetHeader("X-Hub-Signature-256")
+	if !verifyGitHubSignature(body, signature, webhookSecret) {
+		logger.Error("Invalid webhook signature")
+		c.JSON(401, gin.H{"error": "Invalid signature"})
 		return
 	}
 
