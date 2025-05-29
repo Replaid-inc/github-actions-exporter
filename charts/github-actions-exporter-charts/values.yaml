@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: ghcr.io/your-org/github-actions-exporter  # Update with actual registry
+  repository: ghcr.io/Replaid-inc/github-actions-exporter  # Update with actual registry
   pullPolicy: IfNotPresent
   tag: "latest"
 

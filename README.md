@@ -43,7 +43,7 @@ gh-actions-exporter
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-org/github-actions-exporter.git
+   git clone https://github.com/Replaid-inc/github-actions-exporter.git
    cd github-actions-exporter
    ```
 
@@ -116,7 +116,7 @@ Deploy to Kubernetes using the provided Helm chart:
 
 ```bash
 # Add the repository (replace with your actual Helm repository)
-helm repo add github-actions-exporter https://your-org.github.io/github-actions-exporter
+helm repo add github-actions-exporter https://Replaid-inc.github.io/github-actions-exporter
 
 # Install the chart
 helm install github-actions-exporter github-actions-exporter/github-actions-exporter \
@@ -190,7 +190,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- Create an [issue](https://github.com/your-org/github-actions-exporter/issues) for bug reports or feature requests
+- Create an [issue](https://github.com/Replaid-inc/github-actions-exporter/issues) for bug reports or feature requests
 - Contact: @jdunnink
 
 ## Monitoring Dashboard
