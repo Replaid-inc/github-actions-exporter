@@ -2,7 +2,7 @@
 
 ## Overview
 
-The GitHub Actions Exporter is a service designed to collect and expose metrics about GitHub Actions workflows and jobs for monitoring with Prometheus. This project focuses on implementing the Webhook Receiver component, which processes incoming GitHub webhook events.
+The GitHub Actions Exporter is a service designed to collect and expose metrics about GitHub Actions workflows for monitoring with Prometheus.
 
 ## Project Structure
 
@@ -11,14 +11,9 @@ gh-actions-exporter
 ├── cmd
 │   └── gh-actions-exporter
 │       └── main.go          # Entry point of the application
-├── config
-│   ├── config.go           # Configuration structure and loading
-│   └── config.yaml         # Configuration settings (server port, webhook secret)
 ├── internal
 │   ├── handlers
 │   │   └── webhook.go      # Webhook receiver implementation
-│   ├── models
-│   │   └── github_events.go # Data structures for GitHub webhook events
 │   └── server
 │       └── server.go       # HTTP server setup and routing
 ├── .gitignore               # Files and directories to ignore by Git
@@ -129,14 +124,6 @@ When `GITHUB_WEBHOOK_SECRET` is set, the application will verify the HMAC signat
 
 If no secret is configured, signature verification is skipped (not recommended for production use).
 
-### Logging
-
-The Webhook Receiver will log the full payloads of incoming webhook events to stdout for monitoring and debugging purposes.
-
-### Metrics
-
-The exporter collects and exposes the following Prometheus metrics:
-
 #### github_workflow_status
 
 Status of GitHub workflow runs with the following labels:
@@ -187,10 +174,6 @@ For local development:
 6. Commit your changes: `git commit -am 'Add some feature'`
 7. Push to the branch: `git push origin feature/your-feature`
 8. Submit a pull request
-
-### Security
-
-Please report security vulnerabilities following our [Security Policy](SECURITY.md).
 
 ## License
 
