@@ -3,6 +3,10 @@ FROM golang:1.22-alpine AS builder
 
 WORKDIR /build
 
+# Copy go modules first for better caching
+COPY go.mod go.sum ./
+RUN go mod download
+
 # Copy the entire project to maintain module structure
 COPY . .
 

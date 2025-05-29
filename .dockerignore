@@ -1,0 +1,35 @@
+# Git files
+.git
+.gitignore
+
+# Documentation and example files
+*.md
+dashboard-example.png
+
+# CI/CD files (not needed in container)
+.github
+
+# Development files
+Taskfile.yml
+test_webhook.sh
+renovate.json
+
+# Build artifacts (the binary, not the source)
+gh-actions-exporter
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Charts (Helm charts not needed in container)
+charts
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
