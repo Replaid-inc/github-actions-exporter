@@ -76,7 +76,7 @@ Status of GitHub workflow runs with the following labels:
 
 Values:
 - 0 = in_progress
-- 1 = success 
+- 1 = success
 - 2 = failure
 - 3 = timed_out
 - 4 = startup_failure
@@ -105,8 +105,8 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 
 ### License
 
-Proprietary MatchWornshirt
+MIT license
 
 ### Support
 
-mws platform team
+@jdunnink
