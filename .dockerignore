@@ -33,3 +33,10 @@ charts
 # OS files
 .DS_Store
 Thumbs.db
+
+# Ensure we don't exclude source code directories
+!cmd/
+!internal/
+!*.go
+!go.mod
+!go.sum

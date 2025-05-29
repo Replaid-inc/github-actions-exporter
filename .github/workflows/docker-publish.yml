@@ -63,6 +63,7 @@ jobs:
           platforms: linux/amd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          provenance: false
 
       - name: Generate artifact attestation
         if: github.event_name != 'pull_request'
