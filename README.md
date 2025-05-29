@@ -50,12 +50,23 @@ gh-actions-exporter
 
 ### Running the Application
 
+#### Environment Variables
+
+- `PORT`: The port the server will listen on (default: `:8080`)
+- `GITHUB_WEBHOOK_SECRET`: The secret token for verifying GitHub webhook signatures (optional but recommended for production)
+
 To run the application, execute the following command:
 ```
 go run cmd/gh-actions-exporter/main.go
 ```
 
 The application will start an HTTP server that listens for GitHub webhook events.
+
+#### Security
+
+When `GITHUB_WEBHOOK_SECRET` is set, the application will verify the HMAC signature of incoming webhooks using the `X-Hub-Signature-256` header. This ensures that webhooks are genuinely from GitHub and haven't been tampered with.
+
+If no secret is configured, signature verification is skipped (not recommended for production use).
 
 ### Logging
 

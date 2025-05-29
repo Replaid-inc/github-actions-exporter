@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-func StartServer(port string) {
+func StartServer(port string, webhookSecret string) {
 
 	// Handle graceful shutdown
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
@@ -44,7 +44,7 @@ func StartServer(port string) {
 
 	// Use middleware to inject dependencies
 	r.POST("/webhook", func(c *gin.Context) {
-		handlers.WebhookHandler(c, processor, logger)
+		handlers.WebhookHandler(c, processor, logger, webhookSecret)
 	})
 
 	r.GET("/health", handleHealth)
