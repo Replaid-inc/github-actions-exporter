@@ -1,0 +1,33 @@
+version: '3'
+
+vars:
+  BIN_NAME: gh-actions-exporter
+  CMD_DIR: ./cmd/gh-actions-exporter
+
+tasks:
+  build:
+    desc: Build the Go application
+    cmds:
+      - go build -o {{.BIN_NAME}} {{.CMD_DIR}}
+
+  run:
+    desc: Run the Go application
+    cmds:
+      - ./{{.BIN_NAME}}
+
+  test:
+    desc: Run tests for the application
+    cmds:
+      - go test ./...
+
+  clean:
+    desc: Clean up build artifacts
+    cmds:
+      - rm -f {{.BIN_NAME}}
+
+  all:
+    desc: Build, test, and run the application
+    cmds:
+      - task build
+      - task test
+      - task run
