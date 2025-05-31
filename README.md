@@ -117,17 +117,17 @@ Status of GitHub workflow runs with the following labels:
 - `ref_type`: Indicates whether the workflow was triggered by a "branch" or a "tag"
 
 Values:
-- 0 = in_progress
-- 1 = success
-- 2 = failure
-- 3 = timed_out
-- 4 = startup_failure
-- 5 = cancelled
-- 6 = skipped
-- 7 = neutral
+- 0 = timed_out
+- 1 = failure
+- 2 = startup_failure
+- 3 = cancelled
+- 4 = skipped
+- 5 = neutral
+- 6 = stale
+- 7 = null
 - 8 = action_required
-- 9 = stale
-- 10 = null
+- 9 = in_progress
+- 10 = success
 
 Example Prometheus queries:
 ```
