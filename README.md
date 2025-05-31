@@ -6,32 +6,6 @@
 
 The GitHub Actions Exporter is a service designed to collect and expose metrics about GitHub Actions workflows for monitoring with Prometheus.
 
-## Project Structure
-
-```
-gh-actions-exporter
-├── cmd
-│   └── gh-actions-exporter
-│       └── main.go          # Entry point of the application
-|
-├── internal
-│   ├── handlers
-│   │   └── webhook.go      # Webhook receiver implementation
-|   |
-│   ├── metrics
-│   │   └── processor.go    # main implementation for the metrics processor
-│   │   └── exposer.go      # expose metrics at /metrics
-|   |
-│   └── server
-│       └── server.go       # HTTP server setup and routing
-|
-├── .gitignore               # Files and directories to ignore by Git
-├── go.mod                   # Module definition and dependencies
-├── go.sum                   # Checksums for module dependencies
-├── README.md                # Project documentation
-└── Taskfile.yml             # Tasks for building, testing, and running the application
-```
-
 ## Getting Started
 
 ### Prerequisites
