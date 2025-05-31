@@ -20,16 +20,37 @@ func StartServer(port string, webhookSecret string) {
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 	defer stop()
 
-	// Create a logger with debug level enabled
+	// Get log level from environment variable, default to info
+	logLevel := os.Getenv("LOG_LEVEL")
+	if logLevel == "" {
+		logLevel = "info"
+	}
+
+	// Parse log level
+	var zapLevel zap.AtomicLevel
+	switch logLevel {
+	case "debug":
+		zapLevel = zap.NewAtomicLevelAt(zap.DebugLevel)
+	case "info":
+		zapLevel = zap.NewAtomicLevelAt(zap.InfoLevel)
+	case "warn":
+		zapLevel = zap.NewAtomicLevelAt(zap.WarnLevel)
+	case "error":
+		zapLevel = zap.NewAtomicLevelAt(zap.ErrorLevel)
+	default:
+		zapLevel = zap.NewAtomicLevelAt(zap.InfoLevel)
+	}
+
+	// Create a logger with configurable level
 	loggerConfig := zap.NewDevelopmentConfig()
-	loggerConfig.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
+	loggerConfig.Level = zapLevel
 	logger, err := loggerConfig.Build()
 	if err != nil {
 		logger.Fatal("Failed to initialize logger", zap.Error(err))
 	}
 	defer logger.Sync()
 
-	logger.Debug("Debug logging enabled")
+	logger.Info("Logger initialized", zap.String("level", logLevel))
 
 	registry := prometheus.NewRegistry()
 	processor := metrics.NewMetricsProcessor(logger, registry)
